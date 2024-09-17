@@ -1,0 +1,9 @@
+{
+  "name": "is-equal",
+  "version": "1.0.0",
+  "description": "The Circom is-equal circuit.",
+  "scripts": {},
+  "dependencies": {
+    "circomlib": "^2.0.5"
+  }
+}
