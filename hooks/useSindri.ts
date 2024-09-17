@@ -2,13 +2,13 @@ import { useState } from 'react';
 
 export function useSindri() {
     const [proofGenerating, setProofGenerating] = useState(false);
-    const [proof, setProof] = useState<string | null>(null);
     const [error, setError] = useState<string | null>(null);
 
     // Generate proof using two integer inputs
     const generateProof = async (num1: number, num2: number, setFeedbackMessages: Function) => {
         setProofGenerating(true);
         setError(null);
+        setFeedbackMessages((prevMessages) => [...prevMessages, 'Starting Sindri proof generation...']);
 
         try {
             const response = await fetch('/api/sindri', {
@@ -25,15 +25,19 @@ export function useSindri() {
             }
 
             const data = await response.json();
-            setProof(JSON.stringify(data.proof));
-            console.log(proof);
+            const proof = JSON.stringify(data.proof);  // Return proof as JSON string
+
+            console.log('Proof generated:', proof);
+            setFeedbackMessages((prevMessages) => [...prevMessages, 'Proof generation completed.']);
+            return proof;  // Return the proof to the caller
         } catch (err) {
             setError(err instanceof Error ? err.message : 'An unknown error occurred.');
             setFeedbackMessages((prevMessages) => [...prevMessages, err.message]);
+            return null;  // Return null if proof generation failed
         } finally {
             setProofGenerating(false);
         }
     };
 
-    return { proofGenerating, proof, error, generateProof };
+    return { proofGenerating, error, generateProof };
 }

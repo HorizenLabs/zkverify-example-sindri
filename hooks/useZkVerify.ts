@@ -11,9 +11,6 @@ export function useZkVerify() {
         setError(null);
 
         try {
-            setVerificationStatus('Starting proof verification...');
-
-            // Sending the combined verification data to the backend
             const response = await fetch('/api/zkverify', {
                 method: 'POST',
                 headers: {
@@ -30,11 +27,8 @@ export function useZkVerify() {
 
             // Parse response
             const data = await response.json();
-
-            // Set verification status with the successful transaction result
             setVerificationStatus(`Proof verified successfully. Transaction result: ${JSON.stringify(data.txResult, null, 2)}`);
         } catch (err) {
-            // Capture and display errors
             setError(err.message || 'An unknown error occurred during verification');
         } finally {
             setVerifying(false);
